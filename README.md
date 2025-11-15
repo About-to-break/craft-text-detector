@@ -58,7 +58,7 @@ ValueError: setting an array element with a sequence
 - Install using pip:
 
 ```console
-pip install craft-text-detector
+pip install github.com/About-to-break/craft-text-detector.git
 ```
 
 ### Basic Usage
