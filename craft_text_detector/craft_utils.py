@@ -65,14 +65,14 @@ def load_craftnet_model(
 
     # arange device
     if cuda:
-        craft_net.load_state_dict(copyStateDict(torch_utils.load(weight_path)))
+        craft_net.load_state_dict(copyStateDict(torch_utils.load(weight_path, weights_only=True)))
 
         craft_net = craft_net.cuda()
         craft_net = torch_utils.DataParallel(craft_net)
         torch_utils.cudnn_benchmark = False
     else:
         craft_net.load_state_dict(
-            copyStateDict(torch_utils.load(weight_path, map_location="cpu"))
+            copyStateDict(torch_utils.load(weight_path, map_location="cpu", weights_only=True))
         )
     craft_net.eval()
     return craft_net
@@ -109,14 +109,14 @@ def load_refinenet_model(
 
     # arange device
     if cuda:
-        refine_net.load_state_dict(copyStateDict(torch_utils.load(weight_path)))
+        refine_net.load_state_dict(copyStateDict(torch_utils.load(weight_path, weights_only=True)))
 
         refine_net = refine_net.cuda()
         refine_net = torch_utils.DataParallel(refine_net)
         torch_utils.cudnn_benchmark = False
     else:
         refine_net.load_state_dict(
-            copyStateDict(torch_utils.load(weight_path, map_location="cpu"))
+            copyStateDict(torch_utils.load(weight_path, map_location="cpu", weights_only=True))
         )
     refine_net.eval()
     return refine_net
@@ -412,8 +412,10 @@ def getDetBoxes(textmap, linkmap, text_threshold, link_threshold, low_text, poly
 
 def adjustResultCoordinates(polys, ratio_w, ratio_h, ratio_net=2):
     if len(polys) > 0:
-        polys = np.array(polys)
+        polys = [np.array(poly) if poly is not None else None for poly in polys]
+
         for k in range(len(polys)):
             if polys[k] is not None:
-                polys[k] *= (ratio_w * ratio_net, ratio_h * ratio_net)
+                polys[k] = polys[k] * np.array([ratio_w * ratio_net, ratio_h * ratio_net])
+
     return polys

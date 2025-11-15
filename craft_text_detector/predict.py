@@ -60,6 +60,16 @@ def get_prediction(
     x = torch_utils.Variable(x.unsqueeze(0))  # [c, h, w] to [b, c, h, w]
     if cuda:
         x = x.cuda()
+
+    if cuda:
+        craft_net = craft_net.cuda()
+        if refine_net is not None:
+            refine_net = refine_net.cuda()
+    else:
+        craft_net = craft_net.cpu()
+        if refine_net is not None:
+            refine_net = refine_net.cpu()
+
     preprocessing_time = time.time() - t0
     t0 = time.time()
 
@@ -104,10 +114,7 @@ def get_prediction(
     boxes_as_ratio = np.array(boxes_as_ratio)
 
     # calculate poly coords as ratios to image size
-    polys_as_ratio = []
-    for poly in polys:
-        polys_as_ratio.append(poly / [img_width, img_height])
-    polys_as_ratio = np.array(polys_as_ratio)
+    polys_as_ratio = [poly / np.array([img_width, img_height]) for poly in polys]
 
     text_score_heatmap = image_utils.cvt2HeatmapImg(score_text)
     link_score_heatmap = image_utils.cvt2HeatmapImg(score_link)

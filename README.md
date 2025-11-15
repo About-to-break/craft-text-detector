@@ -1,12 +1,10 @@
 # CRAFT: Character-Region Awareness For Text detection
 
 <p align="center">
-<a href="https://pepy.tech/project/craft-text-detector"><img src="https://pepy.tech/badge/craft-text-detector" alt="downloads"></a>
-<a href="https://pypi.org/project/craft-text-detector"><img src="https://img.shields.io/pypi/pyversions/craft-text-detector" alt="downloads"></a>
+<a href="#"><img src="https://img.shields.io/badge/python-3.9-blue" alt="Python 3.9"></a>
 <a href="https://twitter.com/fcakyon"><img src="https://img.shields.io/twitter/follow/fcakyon?color=blue&logo=twitter&style=flat" alt="fcakyon twitter">
 <br>
 <a href="https://github.com/fcakyon/craft-text-detector/actions"><img alt="Build status" src="https://github.com/fcakyon/craft-text-detector/actions/workflows/ci.yml/badge.svg"></a>
-<a href="https://badge.fury.io/py/craft-text-detector"><img src="https://badge.fury.io/py/craft-text-detector.svg" alt="PyPI version" height="20"></a>
 <a href="https://github.com/fcakyon/craft-text-detector/blob/main/LICENSE"><img alt="License: MIT" src="https://img.shields.io/pypi/l/craft-text-detector"></a>
 </p>
 
@@ -18,6 +16,41 @@ PyTorch implementation for CRAFT text detector that effectively detect text area
 
 <img width="1000" alt="teaser" src="./figures/craft_example.gif">
 
+### What’s New (Updated for Python 3.9)
+
+This fork contains several important improvements:
+
+#### ✔ Full Python 3.9 compatibility
+
+- All modules updated and tested under Python 3.9
+
+- Removed deprecated API usages
+
+- Dependencies updated accordingly
+
+#### ✔ CUDA / GPU fix
+
+Fixed critical mismatch:
+
+```
+RuntimeError: Input type (torch.cuda.FloatTensor) and weight type (torch.FloatTensor) should be the same
+```
+Also `RTX Blackwell` support tested.
+
+#### ✔ Fixed crash in polygon ratio conversion
+
+Fixed:
+```
+ValueError: setting an array element with a sequence
+```
+
+#### ✔ Tests updated
+
+- All CPU/GPU tests now pass
+
+- Added GPU smoke test
+
+- Fixed tests using Path
 ## Getting started
 
 ### Installation
@@ -25,7 +58,7 @@ PyTorch implementation for CRAFT text detector that effectively detect text area
 - Install using pip:
 
 ```console
-pip install craft-text-detector
+pip install github.com/About-to-break/craft-text-detector.git
 ```
 
 ### Basic Usage
