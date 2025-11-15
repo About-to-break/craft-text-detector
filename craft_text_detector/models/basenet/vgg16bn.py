@@ -3,8 +3,7 @@ from collections import namedtuple
 import torch
 import torch.nn as nn
 import torch.nn.init as init
-from torchvision import models
-from torchvision.models.vgg import model_urls
+from torchvision.models import vgg16_bn, VGG16_BN_Weights
 
 
 def init_weights(modules):
@@ -21,24 +20,26 @@ def init_weights(modules):
             m.bias.data.zero_()
 
 
-class vgg16_bn(torch.nn.Module):
+class Vgg16Bn(torch.nn.Module):
     def __init__(self, pretrained=True, freeze=True):
-        super(vgg16_bn, self).__init__()
-        model_urls["vgg16_bn"] = model_urls["vgg16_bn"].replace("https://", "http://")
-        vgg_pretrained_features = models.vgg16_bn(pretrained=pretrained).features
+        super(Vgg16Bn, self).__init__()
+        weights = VGG16_BN_Weights.DEFAULT if pretrained else None
+        vgg_model = vgg16_bn(weights=weights)
+        features = vgg_model.features
+
         self.slice1 = torch.nn.Sequential()
         self.slice2 = torch.nn.Sequential()
         self.slice3 = torch.nn.Sequential()
         self.slice4 = torch.nn.Sequential()
         self.slice5 = torch.nn.Sequential()
         for x in range(12):  # conv2_2
-            self.slice1.add_module(str(x), vgg_pretrained_features[x])
+            self.slice1.add_module(str(x), features[x])
         for x in range(12, 19):  # conv3_3
-            self.slice2.add_module(str(x), vgg_pretrained_features[x])
+            self.slice2.add_module(str(x), features[x])
         for x in range(19, 29):  # conv4_3
-            self.slice3.add_module(str(x), vgg_pretrained_features[x])
+            self.slice3.add_module(str(x), features[x])
         for x in range(29, 39):  # conv5_3
-            self.slice4.add_module(str(x), vgg_pretrained_features[x])
+            self.slice4.add_module(str(x), features[x])
 
         # fc6, fc7 without atrous conv
         self.slice5 = torch.nn.Sequential(

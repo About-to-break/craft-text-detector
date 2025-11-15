@@ -8,7 +8,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from craft_text_detector.models.basenet.vgg16_bn import vgg16_bn, init_weights
+from craft_text_detector.models.basenet.vgg16bn import Vgg16Bn, init_weights
 
 
 class double_conv(nn.Module):
@@ -33,7 +33,7 @@ class CraftNet(nn.Module):
         super(CraftNet, self).__init__()
 
         """ Base network """
-        self.basenet = vgg16_bn(pretrained, freeze)
+        self.basenet = Vgg16Bn(pretrained, freeze)
 
         """ U network """
         self.upconv1 = double_conv(1024, 512, 256)

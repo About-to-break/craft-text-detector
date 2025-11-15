@@ -13,7 +13,7 @@ from craft_text_detector import (
 
 
 class TestCraftTextDetectorHelpers(unittest.TestCase):
-    image_path = Path(__file__).resolve().parent.parent / "figures/idcard.png"
+    image_path = str(Path(__file__).resolve().parent.parent / "figures/idcard.png")
 
     def test_load_craftnet_model(self):
         craft_net = load_craftnet_model(cuda=False)

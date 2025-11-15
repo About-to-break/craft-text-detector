@@ -5,7 +5,7 @@ from craft_text_detector import Craft
 
 
 class TestCraftTextDetector(unittest.TestCase):
-    image_path = Path(__file__).resolve().parent.parent / "figures/idcard.png"
+    image_path = str(Path(__file__).resolve().parent.parent / "figures/idcard.png")
 
 
     def test_init(self):
