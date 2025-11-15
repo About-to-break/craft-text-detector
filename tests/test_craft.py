@@ -1,10 +1,12 @@
 import unittest
+from pathlib import Path
 
 from craft_text_detector import Craft
 
 
 class TestCraftTextDetector(unittest.TestCase):
-    image_path = "figures/idcard.png"
+    image_path = Path(__file__).resolve().parent.parent / "figures/idcard.png"
+
 
     def test_init(self):
         craft = Craft(

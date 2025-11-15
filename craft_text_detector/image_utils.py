@@ -5,25 +5,41 @@ MIT License
 
 import cv2
 import numpy as np
+from pathlib import Path
 
 
 def read_image(image):
-    if type(image) == str:
-        img = cv2.imread(image)
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img = None
 
-    elif type(image) == bytes:
+    if isinstance(image, Path):
+        image = str(image)
+
+    if isinstance(image, str):
+        img = cv2.imread(image)
+        if img is not None:
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        else:
+            raise ValueError(f"Cannot read image at path: {image} probably empty")
+
+
+    elif isinstance(image, bytes):
         nparr = np.frombuffer(image, np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        if img is not None:
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        else:
+            raise ValueError(f"Cannot decode image from bytes:{img}")
 
-    elif type(image) == np.ndarray:
+    elif isinstance(image, np.ndarray):
         if len(image.shape) == 2:  # grayscale
             img = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
         elif len(image.shape) == 3 and image.shape[2] == 3:
             img = image
-        elif len(image.shape) == 3 and image.shape[2] == 4:  # RGBAscale
+        elif len(image.shape) == 3 and image.shape[2] == 4:  # RGBA
             img = image[:, :, :3]
+
+    if img is None:
+        raise ValueError(f"Cannot read image, unsupported type or path: {type(image)}")
 
     return img
 
