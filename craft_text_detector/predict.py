@@ -60,6 +60,16 @@ def get_prediction(
     x = torch_utils.Variable(x.unsqueeze(0))  # [c, h, w] to [b, c, h, w]
     if cuda:
         x = x.cuda()
+
+    if cuda:
+        craft_net = craft_net.cuda()
+        if refine_net is not None:
+            refine_net = refine_net.cuda()
+    else:
+        craft_net = craft_net.cpu()
+        if refine_net is not None:
+            refine_net = refine_net.cpu()
+
     preprocessing_time = time.time() - t0
     t0 = time.time()
 
